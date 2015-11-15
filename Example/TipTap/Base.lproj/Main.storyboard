@@ -19,8 +19,21 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UX5-sq-G0D" customClass="TipTapView" customModule="TipTap" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="20" width="600" height="580"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ENK-xM-TUd">
+                                        <rect key="frame" x="297" y="521" width="6" height="15"/>
+                                        <animations/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="ENK-xM-TUd" secondAttribute="bottom" constant="44" id="3Ul-4x-dbn"/>
+                                    <constraint firstItem="ENK-xM-TUd" firstAttribute="centerX" secondItem="UX5-sq-G0D" secondAttribute="centerX" id="D8W-eV-vQC"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <animations/>
@@ -33,6 +46,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="statusLabel" destination="ENK-xM-TUd" id="zUv-uK-dzd"/>
                         <outlet property="tipTapView" destination="UX5-sq-G0D" id="Gfr-qh-Ujz"/>
                     </connections>
                 </viewController>

@@ -53,7 +53,7 @@
 		4A2FA8D01BF7B5AF003F4065 /* TipTapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TipTapView.swift; sourceTree = "<group>"; };
 		4A2FA8D31BF7B621003F4065 /* TipTap-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TipTap-Bridging-Header.h"; sourceTree = "<group>"; };
 		4A2FA8D71BF7D787003F4065 /* TipTapExampleGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TipTapExampleGestureRecognizer.swift; sourceTree = "<group>"; };
-		4A2FA8D91BF7DCC7003F4065 /* TipTapGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TipTapGestureRecognizer.swift; path = ../../TipTapGestureRecognizer.swift; sourceTree = "<group>"; };
+		4A2FA8D91BF7DCC7003F4065 /* TipTapGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TipTapGestureRecognizer.swift; path = ../TipTapGestureRecognizer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +84,7 @@
 		4A2FA8951BF7B469003F4065 = {
 			isa = PBXGroup;
 			children = (
+				4A2FA8D91BF7DCC7003F4065 /* TipTapGestureRecognizer.swift */,
 				4A2FA8A01BF7B469003F4065 /* TipTap */,
 				4A2FA8B51BF7B469003F4065 /* TipTapTests */,
 				4A2FA8C01BF7B469003F4065 /* TipTapUITests */,
@@ -108,7 +109,6 @@
 				4A2FA8A11BF7B469003F4065 /* AppDelegate.swift */,
 				4A2FA8A31BF7B469003F4065 /* ViewController.swift */,
 				4A2FA8D01BF7B5AF003F4065 /* TipTapView.swift */,
-				4A2FA8D91BF7DCC7003F4065 /* TipTapGestureRecognizer.swift */,
 				4A2FA8D71BF7D787003F4065 /* TipTapExampleGestureRecognizer.swift */,
 				4A2FA8A51BF7B469003F4065 /* Main.storyboard */,
 				4A2FA8A81BF7B469003F4065 /* Assets.xcassets */,

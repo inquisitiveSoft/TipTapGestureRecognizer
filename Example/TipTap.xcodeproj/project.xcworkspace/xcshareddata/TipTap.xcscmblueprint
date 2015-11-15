@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "217F2DE496443774D63E89E2501EF91F1704FD42",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "217F2DE496443774D63E89E2501EF91F1704FD42" : 0,
+    "F58929673AE316E50ABD11CF3D2173A6C4ECA026" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "A39F7F38-7A62-4F57-B9A6-3CC67323AEA2",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "217F2DE496443774D63E89E2501EF91F1704FD42" : "TipTapGestureRecognizer\/",
+    "F58929673AE316E50ABD11CF3D2173A6C4ECA026" : ".."
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "TipTap",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Example\/TipTap.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:inquisitiveSoft\/TipTapGestureRecognizer.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "217F2DE496443774D63E89E2501EF91F1704FD42"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:inquisitiveSoft\/Syml.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "F58929673AE316E50ABD11CF3D2173A6C4ECA026"
+    }
+  ]
+}

@@ -16,30 +16,31 @@
 import UIKit
 
 
-enum TipTapType: Int {
+@objc public enum TipTapType: Int {
 	case Left, Middle, Right
 }
 
 
-protocol TipTapGestureRecognizerDelegate: UIGestureRecognizerDelegate {
+@objc public protocol TipTapGestureRecognizerDelegate: UIGestureRecognizerDelegate {
 	func gestureRecognizer(gestureRecognizer: TipTapGestureRecognizer, didRecognizeTipTap tipTapType: TipTapType)
 }
 
 
 
-let TipTapGestureMinimumDragDistance: NSTimeInterval = 5.0
 let TipTapGestureMaximumTapDuration: NSTimeInterval = 0.25
+let TipTapGestureMinimumDragDistance: CGFloat = 55.0
 
 
 public class TipTapGestureRecognizer: UIGestureRecognizer {
 	public var maximumTapDuration: NSTimeInterval = TipTapGestureMaximumTapDuration
+	public var minimumDragDistance: CGFloat = TipTapGestureMinimumDragDistance
 
 	public var requiredNumberOfSourceTaps: Int = 1
 	public var requiredNumberOfTipTaps: Int = 1
 	public var maximumNumberOfSourceTaps: Int = Int.max
 	public var maximumNumberOfTipTaps: Int = Int.max
 
-	internal var currentTouches: [UITouch: NSTimeInterval] = [:]
+	internal var currentTouches: [UITouch: (startTimestamp: NSTimeInterval, startPosition: CGPoint)] = [:]
 	
 	
 	override init(target: AnyObject?, action: Selector) {
@@ -56,8 +57,12 @@ public class TipTapGestureRecognizer: UIGestureRecognizer {
 	
 	
 	public override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent) {
+		guard let view = view else {
+			return
+		}
+		
 		for touch in touches {
-			currentTouches[touch] = event.timestamp
+			currentTouches[touch] = (event.timestamp, touch.locationInView(view))
 		}
 		
 		if(state == .Possible) {
@@ -69,6 +74,23 @@ public class TipTapGestureRecognizer: UIGestureRecognizer {
 	
 	
 	public override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent) {
+		guard let view = view else {
+			return
+		}
+		
+		let currentTime = event.timestamp
+		
+		for touch in touches {
+			if let touchDetails = currentTouches[touch] where (currentTime - touchDetails.startTimestamp) > maximumTapDuration {
+				let touchPosition = touch.locationInView(view)
+				
+				if CGPoint.distanceBetweenPoints(touchDetails.startPosition, touchPosition) > minimumDragDistance {
+					state = .Failed
+					return
+				}
+			}
+		}
+		
 		state = .Changed
 	}
 	
@@ -79,7 +101,7 @@ public class TipTapGestureRecognizer: UIGestureRecognizer {
 		var tapTouches: [UITouch] = []
 		
 		for touch in touches {
-			if let startTouchTimestamp = currentTouches[touch] where (currentTime - startTouchTimestamp) < maximumTapDuration {
+			if let touchDetails = currentTouches[touch] where (currentTime - touchDetails.startTimestamp) < maximumTapDuration {
 				tapTouches.append(touch)
 				sourceTouches.remove(touch)
 			}
@@ -172,4 +194,17 @@ extension CGPoint {
 		return averagedPoint
 	}
 	
+	
+	static func distanceBetweenPoints(firstPoint: CGPoint, _ secondPoint: CGPoint) -> CGFloat {
+		let distance = CGSize(width: fabs(secondPoint.x - firstPoint.x), height: fabs(secondPoint.y - firstPoint.y))
+		let epsilon: CGFloat = 0.0001
+		
+		if(distance.width < epsilon) {
+			return distance.height;
+		} else if (distance.height < epsilon) {
+			return distance.width;
+		}
+		
+		return CGFloat(sqrt(Double(distance.width * distance.width) + Double(distance.height * distance.height)))
+	}
 }

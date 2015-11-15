@@ -12,9 +12,12 @@
 import UIKit
 
 
-class ViewController: UIViewController, TipTapExampleGestureRecognizerDelegate {
+class ViewController: UIViewController, TipTapGestureRecognizerDelegate, TipTapExampleGestureRecognizerDelegate {
 	@IBOutlet weak var tipTapView: TipTapView!
-
+	@IBOutlet weak var statusLabel: UILabel!
+	var timer: NSTimer? = nil
+	
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
@@ -42,7 +45,26 @@ class ViewController: UIViewController, TipTapExampleGestureRecognizerDelegate {
 	
 	
 	func gestureRecognizer(gestureRecognizer: TipTapGestureRecognizer, didRecognizeTipTap tipTap: TipTapType) {
-		print("tipTap: \(tipTap)")
+		timer?.invalidate()
+		
+		switch tipTap {
+			case .Left:
+				statusLabel.text = "Left Tap"
+			
+			case .Right:
+				statusLabel.text = "Right Tap"
+			
+			default:
+				statusLabel.text = "-"
+				break
+		}
+		
+		timer = NSTimer.scheduledTimerWithTimeInterval(0.3, target: self, selector: "clearStatusLabel:", userInfo: nil, repeats: false)
+	}
+	
+	
+	func clearStatusLabel(timer: NSTimer?) {
+		statusLabel.text = "-"
 	}
 
 }
