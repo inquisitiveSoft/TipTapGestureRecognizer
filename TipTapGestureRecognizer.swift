@@ -28,7 +28,7 @@ import UIKit
 
 
 let TipTapGestureMaximumTapDuration: NSTimeInterval = 0.25
-let TipTapGestureMinimumDragDistance: CGFloat = 55.0
+let TipTapGestureMinimumDragDistance: CGFloat = 105.0
 
 
 public class TipTapGestureRecognizer: UIGestureRecognizer {
@@ -37,9 +37,14 @@ public class TipTapGestureRecognizer: UIGestureRecognizer {
 
 	public var requiredNumberOfSourceTaps: Int = 1
 	public var requiredNumberOfTipTaps: Int = 1
+	public var requiredNumberOfCombinedTaps: Int = 2
 	public var maximumNumberOfSourceTaps: Int = Int.max
 	public var maximumNumberOfTipTaps: Int = Int.max
+	public var maximumNumberOfCombinedTaps: Int = Int.max
 
+	public var tapCount: Int = 0
+	
+	
 	internal var currentTouches: [UITouch: (startTimestamp: NSTimeInterval, startPosition: CGPoint)] = [:]
 	
 	
@@ -52,6 +57,8 @@ public class TipTapGestureRecognizer: UIGestureRecognizer {
 
 	public override func reset() {
 		currentTouches.removeAll()
+		tapCount = 0
+		
 		state = .Possible
 	}
 	
@@ -109,9 +116,15 @@ public class TipTapGestureRecognizer: UIGestureRecognizer {
 			currentTouches[touch] = nil
 		}
 		
+		
+		let numberOfTapTouches = tapTouches.count
+		let numberOfSourceTouches = sourceTouches.count
+		let combinedNumberOfTouches = numberOfTapTouches + numberOfSourceTouches
+		
 		if let view = view where !tapTouches.isEmpty &&
-			(tapTouches.count >= requiredNumberOfTipTaps) && (tapTouches.count <= maximumNumberOfTipTaps)
-				&& (sourceTouches.count >= requiredNumberOfSourceTaps) && (tapTouches.count <= maximumNumberOfSourceTaps) {
+			(numberOfTapTouches >= requiredNumberOfTipTaps) && (numberOfTapTouches <= maximumNumberOfTipTaps)
+				&& (numberOfSourceTouches >= requiredNumberOfSourceTaps) && (numberOfSourceTouches <= maximumNumberOfSourceTaps)
+					&& (combinedNumberOfTouches >= requiredNumberOfCombinedTaps) && (combinedNumberOfTouches <= maximumNumberOfCombinedTaps) {
 			
 			let tapPoints = tapTouches.map { (touch) -> (CGPoint) in
 				return touch.locationInView(view)
@@ -135,6 +148,7 @@ public class TipTapGestureRecognizer: UIGestureRecognizer {
 			}
 			
 			state = .Changed
+			tapCount += 1
 			
 			if let delegate = delegate as? TipTapGestureRecognizerDelegate {
 				delegate.gestureRecognizer(self, didRecognizeTipTap: type)
