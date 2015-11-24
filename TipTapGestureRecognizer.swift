@@ -155,7 +155,11 @@ public class TipTapGestureRecognizer: UIGestureRecognizer {
 			}
 		} else {
 			if currentTouches.isEmpty {
-				state = .Ended
+				if tapCount > 0 {
+					state = .Ended
+				} else {
+					state = .Failed
+				}
 			} else {
 				state = .Changed
 			}
