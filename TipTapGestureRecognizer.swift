@@ -17,70 +17,70 @@ import UIKit
 
 
 @objc public enum TipTapType: Int {
-	case Left, Middle, Right
+	case left, middle, right
 }
 
 
 @objc public protocol TipTapGestureRecognizerDelegate: UIGestureRecognizerDelegate {
-	func gestureRecognizer(gestureRecognizer: TipTapGestureRecognizer, didRecognizeTipTap tipTapType: TipTapType)
+	func gestureRecognizer(_ gestureRecognizer: TipTapGestureRecognizer, didRecognizeTipTap tipTapType: TipTapType)
 }
 
 
 
-let TipTapGestureMaximumTapDuration: NSTimeInterval = 0.25
+let TipTapGestureMaximumTapDuration: TimeInterval = 0.25
 let TipTapGestureMinimumDragDistance: CGFloat = 105.0
 
 
-public class TipTapGestureRecognizer: UIGestureRecognizer {
-	public var maximumTapDuration: NSTimeInterval = TipTapGestureMaximumTapDuration
-	public var minimumDragDistance: CGFloat = TipTapGestureMinimumDragDistance
+open class TipTapGestureRecognizer: UIGestureRecognizer {
+	open var maximumTapDuration: TimeInterval = TipTapGestureMaximumTapDuration
+	open var minimumDragDistance: CGFloat = TipTapGestureMinimumDragDistance
 
-	public var requiredNumberOfSourceTaps: Int = 1
-	public var requiredNumberOfTipTaps: Int = 1
-	public var requiredNumberOfCombinedTaps: Int = 2
-	public var maximumNumberOfSourceTaps: Int = Int.max
-	public var maximumNumberOfTipTaps: Int = Int.max
-	public var maximumNumberOfCombinedTaps: Int = Int.max
+	open var requiredNumberOfSourceTaps: Int = 1
+	open var requiredNumberOfTipTaps: Int = 1
+	open var requiredNumberOfCombinedTaps: Int = 2
+	open var maximumNumberOfSourceTaps: Int = Int.max
+	open var maximumNumberOfTipTaps: Int = Int.max
+	open var maximumNumberOfCombinedTaps: Int = Int.max
 
-	public var tapCount: Int = 0
+	open var tapCount: Int = 0
 	
 	
-	internal var currentTouches: [UITouch: (startTimestamp: NSTimeInterval, startPosition: CGPoint)] = [:]
+	internal var currentTouches: [UITouch: (startTimestamp: TimeInterval, startPosition: CGPoint)] = [:]
 	
 	
-	override init(target: AnyObject?, action: Selector) {
+	override init(target: Any?, action: Selector?) {
 		super.init(target: target, action: action)
 		
 		reset()
 	}
 
 
-	public override func reset() {
+	open override func reset() {
 		currentTouches.removeAll()
 		tapCount = 0
 		
-		state = .Possible
+		state = .possible
 	}
 	
 	
-	public override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent) {
+	open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
 		guard let view = view else {
 			return
 		}
 		
 		for touch in touches {
-			currentTouches[touch] = (event.timestamp, touch.locationInView(view))
+			currentTouches[touch] = (event.timestamp, touch.location(in: view))
 		}
 		
-		if(state == .Possible) {
-			state = .Began
+		if(state == .possible) {
+			state = .began
 		} else {
-			state = .Changed
+			state = .changed
 		}
 	}
 	
 	
-	public override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent) {
+	open override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
 		guard let view = view else {
 			return
 		}
@@ -88,27 +88,27 @@ public class TipTapGestureRecognizer: UIGestureRecognizer {
 		let currentTime = event.timestamp
 		
 		for touch in touches {
-			if let touchDetails = currentTouches[touch] where (currentTime - touchDetails.startTimestamp) > maximumTapDuration {
-				let touchPosition = touch.locationInView(view)
+			if let touchDetails = currentTouches[touch] , (currentTime - touchDetails.startTimestamp) > maximumTapDuration {
+				let touchPosition = touch.location(in: view)
 				
 				if CGPoint.distanceBetweenPoints(touchDetails.startPosition, touchPosition) > minimumDragDistance {
-					state = .Failed
+					state = .failed
 					return
 				}
 			}
 		}
 		
-		state = .Changed
+		state = .changed
 	}
 	
 	
-	public override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent) {
+	open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
 		var sourceTouches = Set(currentTouches.keys)
 		let currentTime = event.timestamp
 		var tapTouches: [UITouch] = []
 		
 		for touch in touches {
-			if let touchDetails = currentTouches[touch] where (currentTime - touchDetails.startTimestamp) < maximumTapDuration {
+			if let touchDetails = currentTouches[touch] , (currentTime - touchDetails.startTimestamp) < maximumTapDuration {
 				tapTouches.append(touch)
 				sourceTouches.remove(touch)
 			}
@@ -121,17 +121,17 @@ public class TipTapGestureRecognizer: UIGestureRecognizer {
 		let numberOfSourceTouches = sourceTouches.count
 		let combinedNumberOfTouches = numberOfTapTouches + numberOfSourceTouches
 		
-		if let view = view where !tapTouches.isEmpty &&
+		if let view = view , !tapTouches.isEmpty &&
 			(numberOfTapTouches >= requiredNumberOfTipTaps) && (numberOfTapTouches <= maximumNumberOfTipTaps)
 				&& (numberOfSourceTouches >= requiredNumberOfSourceTaps) && (numberOfSourceTouches <= maximumNumberOfSourceTaps)
 					&& (combinedNumberOfTouches >= requiredNumberOfCombinedTaps) && (combinedNumberOfTouches <= maximumNumberOfCombinedTaps) {
 			
 			let tapPoints = tapTouches.map { (touch) -> (CGPoint) in
-				return touch.locationInView(view)
+				return touch.location(in: view)
 			}
 			
 			let sourcePoints = sourceTouches.map { (touch) -> (CGPoint) in
-				return touch.locationInView(view)
+				return touch.location(in: view)
 			}
 			
 			
@@ -140,14 +140,14 @@ public class TipTapGestureRecognizer: UIGestureRecognizer {
 			let type: TipTapType
 			
 			if tapPoint.x <= sourceRect.minX {
-				type = .Left
+				type = .left
 			} else if tapPoint.x >= sourceRect.maxX {
-				type = .Right
+				type = .right
 			} else {
-				type = .Middle
+				type = .middle
 			}
 			
-			state = .Changed
+			state = .changed
 			tapCount += 1
 			
 			if let delegate = delegate as? TipTapGestureRecognizerDelegate {
@@ -156,19 +156,19 @@ public class TipTapGestureRecognizer: UIGestureRecognizer {
 		} else {
 			if currentTouches.isEmpty {
 				if tapCount > 0 {
-					state = .Ended
+					state = .ended
 				} else {
-					state = .Failed
+					state = .failed
 				}
 			} else {
-				state = .Changed
+				state = .changed
 			}
 		}
 	}
 	
 			
-	public override func touchesCancelled(touches: Set<UITouch>, withEvent event: UIEvent) {
-		touchesEnded(touches, withEvent: event)
+	open override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent) {
+		touchesEnded(touches, with: event)
 	}
 
 }
@@ -201,8 +201,8 @@ extension CGRect {
 
 extension CGPoint {
 
-	static func averageOfPoints(points: [CGPoint]) -> CGPoint {
-		let combinedPoints = points.reduce(CGPointZero) {
+	static func averageOfPoints(_ points: [CGPoint]) -> CGPoint {
+		let combinedPoints = points.reduce(CGPoint.zero) {
 			return CGPoint(x: ($0.x + $1.x), y: ($0.y + $1.y))
 		}
 
@@ -213,7 +213,7 @@ extension CGPoint {
 	}
 	
 	
-	static func distanceBetweenPoints(firstPoint: CGPoint, _ secondPoint: CGPoint) -> CGFloat {
+	static func distanceBetweenPoints(_ firstPoint: CGPoint, _ secondPoint: CGPoint) -> CGFloat {
 		let distance = CGSize(width: fabs(secondPoint.x - firstPoint.x), height: fabs(secondPoint.y - firstPoint.y))
 		let epsilon: CGFloat = 0.0001
 		
