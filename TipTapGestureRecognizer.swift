@@ -32,17 +32,17 @@ let TipTapGestureMinimumDragDistance: CGFloat = 105.0
 
 
 open class TipTapGestureRecognizer: UIGestureRecognizer {
-	open var maximumTapDuration: TimeInterval = TipTapGestureMaximumTapDuration
-	open var minimumDragDistance: CGFloat = TipTapGestureMinimumDragDistance
+	@objc open var maximumTapDuration: TimeInterval = TipTapGestureMaximumTapDuration
+	@objc open var minimumDragDistance: CGFloat = TipTapGestureMinimumDragDistance
 
-	open var requiredNumberOfSourceTaps: Int = 1
-	open var requiredNumberOfTipTaps: Int = 1
-	open var requiredNumberOfCombinedTaps: Int = 2
-	open var maximumNumberOfSourceTaps: Int = Int.max
-	open var maximumNumberOfTipTaps: Int = Int.max
-	open var maximumNumberOfCombinedTaps: Int = Int.max
+	@objc open var requiredNumberOfSourceTaps: Int = 1
+	@objc open var requiredNumberOfTipTaps: Int = 1
+	@objc open var requiredNumberOfCombinedTaps: Int = 2
+	@objc open var maximumNumberOfSourceTaps: Int = Int.max
+	@objc open var maximumNumberOfTipTaps: Int = Int.max
+	@objc open var maximumNumberOfCombinedTaps: Int = Int.max
 
-	open var tapCount: Int = 0
+	@objc open var tapCount: Int = 0
 	
 	
 	internal var currentTouches: [UITouch: (startTimestamp: TimeInterval, startPosition: CGPoint)] = [:]
