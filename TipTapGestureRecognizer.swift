@@ -214,7 +214,7 @@ extension CGPoint {
 	
 	
 	static func distanceBetweenPoints(_ firstPoint: CGPoint, _ secondPoint: CGPoint) -> CGFloat {
-		let distance = CGSize(width: fabs(secondPoint.x - firstPoint.x), height: fabs(secondPoint.y - firstPoint.y))
+		let distance = CGSize(width: abs(secondPoint.x - firstPoint.x), height: fabs(secondPoint.y - firstPoint.y))
 		let epsilon: CGFloat = 0.0001
 		
 		if(distance.width < epsilon) {
